@@ -1,39 +1,38 @@
 package contig;
 
 import java.util.*;
-//CreateFolder-root/amr
 
-public class folder {
+public class foldercont {
 
     String name;
     int start;
     int size;
     int level ;
     Vector<FilesInterface> fi = new Vector();
-    Vector<folder> children = new Vector();
+    Vector<foldercont> children = new Vector();
     String[] splited;
-    disk di ;
-    public folder(String name, int start, int size,int level) {
+    diskcont di ;
+    public foldercont(String name, int start, int size,int level) {
         this.name = name;
         this.size = size;
         this.start = start;
         this.level=level ;
     }
 
-    public folder(int N) {
-        folder root = new folder("root", 0, N,0);
+    public foldercont(int N) {
+        foldercont root = new foldercont("root", 0, N,0);
         this.children.add(root);
-        di = new disk(N);
+        di = new diskcont(N);
     }
 
-    public folder getaddress(String address) {
-        folder f = children.elementAt(0);
+    public foldercont getaddress(String address) {
+        foldercont f = children.elementAt(0);
 
         splited = address.split("/");
         //System.out.println(splited[1]);
         if (splited[0].equals("root")) {
             for (int i = 1; i < splited.length - 1; i++) {
-                folder newfolder = getchildren(splited[i], f);
+                foldercont newfolder = getchildren(splited[i], f);
                 if (f.equals(newfolder)) {
                     return null;
                 }
@@ -46,7 +45,7 @@ public class folder {
         }
     }
 
-    public folder getchildren(String address, folder f) {
+    public foldercont getchildren(String address, foldercont f) {
         for (int i = 0; i < f.children.size(); i++) {
 
             if (f.children.get(i).name.equals(address)) {
@@ -56,22 +55,34 @@ public class folder {
         return f;
     }
 
-   
-
-
     public void DeleteFolder(String address) {
-        folder f = getaddress(address);
+        System.out.println(address);
+        String[] S = address.split("/");
+        address = "";
+        for (int i = 0; i < S.length - 1; i++) {
+            address += S[i];
+            address += "/";
+        }
+
+        System.out.println(address);
+        foldercont f = getaddress(address);
         if (f != null) {
-            di.delete(f.start, f.size);
-            f.fi.remove(f);
-            System.out.print("Folder Deleted !");
+            for (int i = 0; i < f.children.size(); i++) {
+                if (f.children.elementAt(i).name.equals(S[S.length - 2])) {
+                    di.delete(f.children.elementAt(i).start, f.children.elementAt(i).size);
+                    // f.fi.remove(f);
+                    f.children.remove(i);
+
+                    System.out.print("Folder Deleted !");
+                }
+            }
         } else {
             System.out.println("No Folder With This Name");
         }
     }
 
     public void DeleteFile(String address) {
-        folder f = getaddress(address);
+        foldercont f = getaddress(address);
         if (f != null) {
             FilesInterface target = null;
             for (int i = 0; i < f.fi.size(); i++) {
@@ -91,12 +102,10 @@ public class folder {
         }
     }
 
-    void addfolder(String address, folder fo) {
+    void addfolder(String address, foldercont fo) {
         boolean flag = false;
-        folder parent = getaddress(address);
+        foldercont parent = getaddress(address);
         if (parent != null) {
-           // System.out.println(parent.start+" "+fo.start+" "+parent.size+" "+fo.size +" "+parent.name);
-          // if( (parent.start < fo.start) && ((parent.start + parent.size) > (fo.size + fo.start)))
            if(di.chechboundry(parent.start,fo.start,parent.size,fo.size))
            {
                if (di.check(fo.start, fo.size)) {
@@ -112,7 +121,7 @@ public class folder {
                    // di.add(fo.start, fo.size);
                     fo.level=parent.level+1;
                     parent.children.add(fo);
-                    System.out.print("Folder Added !");
+                    System.out.println("Folder Added !");
                 }
             } 
                else {
@@ -131,15 +140,16 @@ public class folder {
     
     
      void addfile(String address, FilesInterface fil) {
-        folder parent = getaddress(address);
+        foldercont parent = getaddress(address);
         if (parent != null) {
-            if (di.check(fil.Start, fil.size) && (parent.start < fil.Start) && ((parent.start + parent.size) > (fil.size + fil.Start))) {
+            if(di.chechboundry(parent.start,fil.Start,parent.size,fil.size)){
+            if (di.check(fil.Start, fil.size) ) {
                 {
                     fil.level=parent.level+1;
                     parent.fi.add(fil);
                     di.add(fil.Start,fil.size);
-                    System.out.print("File Added !");
-                }
+                    System.out.println("File Added !");
+                }}
             } else {
                 System.out.println("Not Have Enoght Space or out of range");
             }
@@ -155,7 +165,7 @@ public class folder {
              arr += "\t";
          return arr ;
      }
-          public String getspace(folder f)
+          public String getspace(foldercont f)
      {
          String arr = "";
          for(int i=0 ; i<f.level;i++)
