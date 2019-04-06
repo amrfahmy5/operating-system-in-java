@@ -1,38 +1,41 @@
 package contig;
 
+import contig.FilesInterfaceLinker;
+import contig.FolderLinked;
+import contig.diskLinked;
 import java.util.Vector;
 
-public class FolderLinked {
+public class FolderIndex {
 
     String name;
     int[] arr;
     int level;
     Vector<FilesInterfaceLinker> fi = new Vector();
-    Vector<FolderLinked> children = new Vector();
+    Vector<FolderIndex> children = new Vector();
     String[] splited;
-    diskLinked di;
+    diskIndex di;
 
-    public FolderLinked(String name, int[] arr, int level) {
+    public FolderIndex(String name, int[] arr, int level) {
         this.name = name;
         this.arr = arr;
         this.level = level;
     }
 
-    public FolderLinked(int N) {
+    public FolderIndex(int N) {
         this.arr = new int[N];
-        FolderLinked root = new FolderLinked("root", arr, 0);
+        FolderIndex root = new FolderIndex("root", arr, 0);
         this.children.add(root);
-        di = new diskLinked(N);
+        di = new diskIndex(N);
     }
 
-    public FolderLinked getaddress(String address) {
-        FolderLinked f = children.elementAt(0);
+    public FolderIndex getaddress(String address) {
+        FolderIndex f = children.elementAt(0);
 
         splited = address.split("/");
         //System.out.println(splited[1]);
         if (splited[0].equals("root")) {
             for (int i = 1; i < splited.length - 1; i++) {
-                FolderLinked newfolder = getchildren(splited[i], f);
+                FolderIndex newfolder = getchildren(splited[i], f);
                 if (f.equals(newfolder)) {
                     return null;
                 }
@@ -45,7 +48,7 @@ public class FolderLinked {
         }
     }
 
-    public FolderLinked getchildren(String address, FolderLinked f) {
+    public FolderIndex getchildren(String address, FolderIndex f) {
         for (int i = 0; i < f.children.size(); i++) {
 
             if (f.children.get(i).name.equals(address)) {
@@ -65,7 +68,7 @@ public class FolderLinked {
         }
 
         //System.out.println(address);
-        FolderLinked f = getaddress(address);
+        FolderIndex f = getaddress(address);
         if (f != null) {
             di.delete(f.arr[0]);
             f.fi.remove(f.fi.indexOf(f));
@@ -83,7 +86,7 @@ public class FolderLinked {
     }
 
     public void DeleteFile(String address) {
-        FolderLinked f = getaddress(address);
+        FolderIndex f = getaddress(address);
         if (f != null) {
             FilesInterfaceLinker target = null;
             for (int i = 0; i < f.fi.size(); i++) {
@@ -103,9 +106,9 @@ public class FolderLinked {
         }
     }
 
-    void addfolder(String address, FolderLinked fo) {
+    void addfolder(String address, FolderIndex fo) {
         boolean flag = false;
-        FolderLinked parent = getaddress(address);
+        FolderIndex parent = getaddress(address);
         if (parent != null) {
             // System.out.println(parent.start+" "+fo.start+" "+parent.size+" "+fo.size +" "+parent.name);
             // if( (parent.start < fo.start) && ((parent.start + parent.size) > (fo.size + fo.start)))
@@ -134,7 +137,7 @@ public class FolderLinked {
     }
 
     void addfile(String address, FilesInterfaceLinker fil) {
-        FolderLinked parent = getaddress(address);
+        FolderIndex parent = getaddress(address);
         if (parent != null) {
 
             if (di.check(fil.arr[0])) {
@@ -161,7 +164,7 @@ public class FolderLinked {
         return arr;
     }
 
-    public String getspace(FolderLinked f) {
+    public String getspace(FolderIndex f) {
         String arr = "";
         for (int i = 0; i < f.level; i++) {
             arr += "\t";
@@ -177,5 +180,5 @@ public class FolderLinked {
             System.out.println(getspace(children.elementAt(i)) + "<" + children.elementAt(i).name + ">");
             children.elementAt(i).print();
         }
-    }
+    }    
 }
