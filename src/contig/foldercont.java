@@ -181,4 +181,8 @@ public class foldercont {
             children.elementAt(i).print();
         }
     }
+    public void printSt()
+    {
+        di.print();
+    }
 }

@@ -27,7 +27,7 @@ public class main {
             System.out.flush();
 
              command = input.next();
-        String[] splited = command.split("\\\\s+");
+        String[] splited = command.split("-");
         //System.out.println(splited.length);
         
         //CreateFolder-root/amr
@@ -125,6 +125,8 @@ public class main {
             else if(splited[0].equals("DeleteFile")&&check==3){
                 f2.DeleteFile(splited[1]);
             }
+            
+            
             //delete folder
             else if(splited[0].equals("DeleteFolder")&&check==1)
             {
@@ -136,7 +138,7 @@ public class main {
             }
                else if(splited[0].equals("DeleteFolder")&&check==3)
             {
-                fl.DeleteFolder(splited[1]+"/fake") ;
+                f2.DeleteFolder(splited[1]+"/fake") ;
             }
               
               
@@ -155,8 +157,26 @@ public class main {
             }
              else if(splited[0].equals("DisplayDiskStructure")&&check==3) 
             {
-                fl.print();
+                f2.print();
             }
+             
+             
+             //print Status
+              else if(splited[0].equals("DisplayDiskStatus")&&check==1) 
+            {
+                f.printSt();
+
+            }
+            else if(splited[0].equals("DisplayDiskStatus")&&check==2) 
+            {
+                fl.printSt();
+            }
+             else if(splited[0].equals("DisplayDiskStatus")&&check==3) 
+            {
+                f2.printSt();
+            }
+             
+             
             else    
                 System.out.println("Wrong Syntax");
 

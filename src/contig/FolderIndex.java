@@ -180,5 +180,9 @@ public class FolderIndex {
             System.out.println(getspace(children.elementAt(i)) + "<" + children.elementAt(i).name + ">");
             children.elementAt(i).print();
         }
-    }    
+    }
+     public void printSt()
+    {
+        di.print();
+    }
 }

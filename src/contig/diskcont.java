@@ -12,7 +12,11 @@ public class diskcont {
             block[i] = false;
         }
     }
-
+    public void print()
+    {
+        for(int i=0;i<block.length;i++)
+            System.out.print(block[i]+" ");
+    }
     public boolean check(int start, int length) {
         for (int i = start; i < length + start; i++) {
             if (block[i] == true) {

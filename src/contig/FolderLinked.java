@@ -178,4 +178,8 @@ public class FolderLinked {
             children.elementAt(i).print();
         }
     }
+     public void printSt()
+    {
+        di.print();
+    }
 }

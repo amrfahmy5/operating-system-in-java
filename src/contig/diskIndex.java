@@ -15,7 +15,11 @@ public class diskIndex {
        for(int i=0;i<N;i++)
            block[i].b= false;
    }
-   
+   public void print()
+    {
+        for(int i=0;i<block.length;i++)
+            System.out.print(block[i].b+" ");
+    }
        public  boolean check(int start) {
             if(block[start].b==true)
                 return false;
