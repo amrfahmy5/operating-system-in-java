@@ -1,6 +1,6 @@
 package contig;
 class blockS{
-  public boolean b;
+  public boolean b= false;
 public int next = -1 ;  
 };
 public class diskLinked {
@@ -10,9 +10,9 @@ public class diskLinked {
    public  diskLinked(int n)
    {
        this.N= n;
-       block = new blockS[this.N];
-       for(int i=0;i<N;i++)
-           block[i].b= false;
+       block = new blockS[n];
+//       for(int i=0; i<N ; i++)
+//           block[i].b= false;
    }
    public void print()
     {

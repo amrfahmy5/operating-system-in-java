@@ -55,7 +55,7 @@ public class FolderLinked {
         return f;
     }
 
-    public void DeleteFolder(String address) {
+    public String DeleteFolder(String address) {
         //   System.out.println(address);
         String[] S = address.split("/");
         address = "";
@@ -74,15 +74,16 @@ public class FolderLinked {
                     di.delete(f.children.elementAt(i).arr[0]);
                     // f.fi.remove(f);
                     f.children.remove(i);
-                    System.out.print("Folder Deleted !");
+                    return("Folder Deleted !");
                 } else {
-                    System.out.println("No Folder With This Name");
+                    return("No Folder With This Name");
                 }
             }
         }
+        return("Folder Deleted !");
     }
 
-    public void DeleteFile(String address) {
+    public String DeleteFile(String address) {
         FolderLinked f = getaddress(address);
         if (f != null) {
             FilesInterfaceLinker target = null;
@@ -92,18 +93,18 @@ public class FolderLinked {
                 }
             }
             if (target == null) {
-                System.out.println("Not Files Found With this Name");
+                return("Not Files Found With this Name");
             } else {
                 di.delete(target.arr[0]);
                 f.fi.remove(target);
-                System.out.print("File Deleted !");
+                return("File Deleted !");
             }
         } else {
-            System.out.println("No File With This Name");
+            return("No File With This Name");
         }
     }
 
-    void addfolder(String address, FolderLinked fo) {
+   public String addfolder(String address, FolderLinked fo) {
         boolean flag = false;
         FolderLinked parent = getaddress(address);
         if (parent != null) {
@@ -117,23 +118,23 @@ public class FolderLinked {
                     }
                 }
                 if (flag == true) {
-                    System.out.println("Have File With Same Name");
+                    return("Have File With Same Name");
                 } else {
                     // di.add(fo.start, fo.size);
                     fo.level = parent.level + 1;
                     parent.children.add(fo);
-                    System.out.print("Folder Added !");
+                    return("Folder Added !");
                 }
             } else {
-                System.out.println("This Place Are Stored Befor");
+                return("This Place Are Stored Befor");
             }
 
         } else {
-            System.out.println("No Folder With This Name2");
+            return("No Folder With This Name2");
         }
     }
 
-    void addfile(String address, FilesInterfaceLinker fil) {
+    public String addfile(String address, FilesInterfaceLinker fil) {
         FolderLinked parent = getaddress(address);
         if (parent != null) {
 
@@ -142,13 +143,13 @@ public class FolderLinked {
                     fil.level = parent.level + 1;
                     parent.fi.add(fil);
                     di.add(fil.arr);
-                    System.out.print("File Added !");
+                    return("File Added !");
                 }
             } else {
-                System.out.println("Not Have Enoght Space or out of range");
+                return("Not Have Enoght Space or out of range");
             }
         } else {
-            System.out.println("No Folder With This Name1");
+            return("No Folder With This Name1");
         }
 
     }

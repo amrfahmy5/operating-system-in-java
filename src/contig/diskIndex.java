@@ -12,8 +12,8 @@ public class diskIndex {
    {
        this.N= n;
        block = new blockS1[this.N];
-       for(int i=0;i<N;i++)
-           block[i].b= false;
+//       for(int i=0;i<N;i++)
+//           block[i].b= false;
    }
    public void print()
     {
