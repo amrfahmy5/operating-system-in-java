@@ -59,7 +59,6 @@ public class FolderIndex {
     }
 
     public String DeleteFolder(String address) {
-        //   System.out.println(address);
         String[] S = address.split("/");
         address = "";
         for (int i = 0; i < S.length - 1; i++) {
@@ -67,14 +66,11 @@ public class FolderIndex {
             address += "/";
         }
 
-        //System.out.println(address);
         FolderIndex f = getaddress(address);
         if (f != null) {
-            di.delete(f.arr[0]);
-            f.fi.remove(f.fi.indexOf(f));
             for (int i = 0; i < f.children.size(); i++) {
                 if (f.children.elementAt(i).name.equals(S[S.length - 2])) {
-                    di.delete(f.children.elementAt(i).arr[0]);
+                    di.deleteFolder(f.children.elementAt(i).arr[0]);
                     // f.fi.remove(f);
                     f.children.remove(i);
                     return("Folder Deleted !");
@@ -83,7 +79,7 @@ public class FolderIndex {
                 }
             }
         }
-        return("Folder Deleted !");
+        return("Wrong address");
     }
 
     public String DeleteFile(String address) {
@@ -98,12 +94,12 @@ public class FolderIndex {
             if (target == null) {
                 return("Not Files Found With this Name");
             } else {
-                di.delete(target.arr[0]);
+                di.deleteFile(target.arr[0]);
                 f.fi.remove(target);
                 return("File Deleted !");
             }
         } else {
-            return("No File With This Name");
+            return("Wrong address");
         }
     }
 
@@ -113,7 +109,7 @@ public class FolderIndex {
         if (parent != null) {
             // System.out.println(parent.start+" "+fo.start+" "+parent.size+" "+fo.size +" "+parent.name);
             // if( (parent.start < fo.start) && ((parent.start + parent.size) > (fo.size + fo.start)))
-            if (di.check(fo.arr[0])) {
+            if (di.checkFolder(fo.arr[0])) {
 
                 for (int i = 0; i < parent.children.size(); i++) {
                     if (parent.children.elementAt(i).equals(fo.name)) {
@@ -123,7 +119,7 @@ public class FolderIndex {
                 if (flag == true) {
                     return("Have File With Same Name");
                 } else {
-                    // di.add(fo.start, fo.size);
+                     di.addFolder(fo.arr);
                     fo.level = parent.level + 1;
                     parent.children.add(fo);
                     return("Folder Added !");
@@ -140,23 +136,29 @@ public class FolderIndex {
     public String addfile(String address, FilesInterfaceLinker fil) {
         FolderIndex parent = getaddress(address);
         if (parent != null) {
-
-            if (di.check(fil.arr[0])) {
+         //  if(checboundry(parent.arr,fil.arr)) {
+            if (di.checkFile(fil.arr[0])) {
                 {
                     fil.level = parent.level + 1;
                     parent.fi.add(fil);
-                    di.add(fil.arr);
+                    di.addFile(fil.arr);
                     return("File Added !");
                 }
             } else {
                 return("Not Have Enoght Space or out of range");
             }
-        } else {
-            return("No Folder With This Name1");
+//        }
+//        else
+//        {
+//            System.out.println("Out of number of block for folder") ;
+//        }
+        }
+        else {
+            return("Wrong address");
         }
 
+    
     }
-
     public String getspace(FilesInterfaceLinker f) {
         String arr = "";
         for (int i = 0; i < f.level; i++) {

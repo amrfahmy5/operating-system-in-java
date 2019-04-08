@@ -57,23 +57,23 @@ public class foldercont {
     }
 
     public String DeleteFolder(String address) {
-        System.out.println(address);
         String[] S = address.split("/");
+        
+        System.out.println(address);
         address = "";
         for (int i = 0; i < S.length - 1; i++) {
             address += S[i];
             address += "/";
         }
-
-        System.out.println(address);
         foldercont f = getaddress(address);
+       // System.out.println(address+" "+S[S.length - 1]);
         if (f != null) {
             for (int i = 0; i < f.children.size(); i++) {
-                if (f.children.elementAt(i).name.equals(S[S.length - 2])) {
-                    di.delete(f.children.elementAt(i).start, f.children.elementAt(i).size);
+                if (f.children.elementAt(i).name.equals(S[S.length - 1])) {
+                    di.deletefolder(f.children.elementAt(i).start, f.children.elementAt(i).size);
                     // f.fi.remove(f);
                     f.children.remove(i);
-
+                    
                      
                     return("Folder Deleted !");
                 }
@@ -96,7 +96,7 @@ public class foldercont {
             if (target == null) {
                 return("Not Files Found With this Name");
             } else {
-               di.delete(target.Start, target.size);
+               di.deletefile(target.Start, target.size);
                 f.fi.remove(target);
                 return("File Deleted !");
             }
@@ -111,11 +111,12 @@ public class foldercont {
         if (parent != null) {
            if(di.chechboundry(parent.start,fo.start,parent.size,fo.size))
            {
-               if (di.check(fo.start, fo.size)) {
-
+               if (di.checkfolder(fo.start, fo.size)) {
                 for (int i = 0; i < parent.children.size(); i++) {
+                    System.out.println(fo.name.length()+" "+parent.children.elementAt(i).name.length());
                     if (parent.children.elementAt(i).equals(fo.name)) {
                         flag = true;
+                        break ;
                     }
                 }
                 if (flag == true) {
@@ -124,6 +125,7 @@ public class foldercont {
                    // di.add(fo.start, fo.size);
                     fo.level=parent.level+1;
                     parent.children.add(fo);
+                    di.addfolder(fo.start, fo.size);
                     return("Folder Added !");
                 }
             } 
@@ -143,23 +145,38 @@ public class foldercont {
     
     
      public String addfile(String address, FilesInterface fil) {
+         boolean flag = false ;
         foldercont parent = getaddress(address);
         if (parent != null) {
             if(di.chechboundry(parent.start,fil.Start,parent.size,fil.size)){
-            if (di.check(fil.Start, fil.size) ) {
-                {
+            if (di.checkfile(fil.Start, fil.size)) 
+            {
+                System.out.println(fil.name);
+                   for (int i = 0; i < parent.fi.size(); i++) {
+                     System.out.println(parent.fi.elementAt(i).name);
+                    if (parent.fi.elementAt(i).equals(fil.name)) {
+                        flag = true;
+                        break ;
+                    }
+                }
+                    if(flag == true)
+                        return("Have Folder With this Name");
+                    else{
                     fil.level=parent.level+1;
                     parent.fi.add(fil);
-                    di.add(fil.Start,fil.size);
+                    di.addfile(fil.Start,fil.size);
                     return("File Added !");
-                }}
-            } else {
-                return("Not Have Enoght Space or out of range");
+                    }
+                }
+            else
+                return("Space are stored befor!");
+            }
+            else {
+                return("out of range");
             }
         } else {
             return("No Folder With This Name1");
         }
-return("File Added !");
     }
      public String getspace(FilesInterface f)
      {

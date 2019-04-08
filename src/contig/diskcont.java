@@ -3,29 +3,40 @@ package contig;
 public class diskcont {
 
     int N;
-    boolean[] block;
+    int[] block;
 
     public diskcont(int n) {
         this.N = n;
-        block = new boolean[this.N];
+        block = new int[this.N];
         for (int i = 0; i < N; i++) {
-            block[i] = false;
+            block[i] = 0;
         }
     }
     public void print()
     {
         for(int i=0;i<block.length;i++)
-            System.out.print(block[i]+" ");
+        {
+                System.out.print(block[i]) ;
+        }
+        System.out.println("") ;
     }
-    public boolean check(int start, int length) {
+    public boolean checkfolder(int start, int length) {
         for (int i = start; i < length + start; i++) {
-            if (block[i] == true) {
+            if (block[i] == 1||block[i]==2) {
                 return false;
             }
         }
         return true;
     }
-
+    public boolean checkfile(int start, int length) {
+        for (int i = start; i < length + start; i++) {
+            if (block[i] == 2) {
+                
+                return false;
+            }
+        }
+        return true;
+    }
     public boolean chechboundry(int Pstart, int Cstart, int Psize, int Csize) {
         if ((Pstart <= Cstart) && ((Pstart + Psize) > (Csize + Cstart))) {
             return true;
@@ -34,15 +45,24 @@ public class diskcont {
         }
     }
 
-    public void add(int start, int length) {
+    public void addfile(int start, int length) {
         for (int i = start; i < start + length; i++) {
-            block[i] = true;
+            block[i] = 2;
         }
     }
-
-    public void delete(int start, int length) {
+   public void addfolder(int start, int length) {
         for (int i = start; i < start + length; i++) {
-            block[i] = false;
+            block[i] = 1;
+        }
+    }
+    public void deletefolder(int start, int length) {
+        for (int i = start; i < start + length; i++) {
+            block[i] = 0;
+        }
+    }
+       public void deletefile(int start, int length) {
+        for (int i = start; i < start + length; i++) {
+            block[i] = 1;
         }
     }
 }

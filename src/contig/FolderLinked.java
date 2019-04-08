@@ -67,12 +67,12 @@ public class FolderLinked {
         //System.out.println(address);
         FolderLinked f = getaddress(address);
         if (f != null) {
-            di.delete(f.arr[0]);
-            f.fi.remove(f.fi.indexOf(f));
+            
+            //f.fi.remove(f.fi.indexOf(f));
             for (int i = 0; i < f.children.size(); i++) {
-                if (f.children.elementAt(i).name.equals(S[S.length - 2])) {
-                    di.delete(f.children.elementAt(i).arr[0]);
-                    // f.fi.remove(f);
+                if (f.children.elementAt(i).name.equals(S[S.length - 1])) {
+                    di.deleteFolder(f.children.elementAt(i).arr[0]);
+                   // di.deleteFolder(f.arr[0]);
                     f.children.remove(i);
                     return("Folder Deleted !");
                 } else {
@@ -80,7 +80,8 @@ public class FolderLinked {
                 }
             }
         }
-        return("Folder Deleted !");
+        
+         return("Wrong address  !");
     }
 
     public String DeleteFile(String address) {
@@ -95,12 +96,12 @@ public class FolderLinked {
             if (target == null) {
                 return("Not Files Found With this Name");
             } else {
-                di.delete(target.arr[0]);
+                di.deleteFile(target.arr[0]);
                 f.fi.remove(target);
                 return("File Deleted !");
             }
         } else {
-            return("No File With This Name");
+            return("Wrong address");
         }
     }
 
@@ -110,7 +111,8 @@ public class FolderLinked {
         if (parent != null) {
             // System.out.println(parent.start+" "+fo.start+" "+parent.size+" "+fo.size +" "+parent.name);
             // if( (parent.start < fo.start) && ((parent.start + parent.size) > (fo.size + fo.start)))
-            if (di.check(fo.arr[0])) {
+            
+            if (di.checkFolder(fo.arr)) {
 
                 for (int i = 0; i < parent.children.size(); i++) {
                     if (parent.children.elementAt(i).equals(fo.name)) {
@@ -120,7 +122,7 @@ public class FolderLinked {
                 if (flag == true) {
                     return("Have File With Same Name");
                 } else {
-                    // di.add(fo.start, fo.size);
+                     di.addFolder(fo.arr);
                     fo.level = parent.level + 1;
                     parent.children.add(fo);
                     return("Folder Added !");
@@ -137,19 +139,22 @@ public class FolderLinked {
     public String addfile(String address, FilesInterfaceLinker fil) {
         FolderLinked parent = getaddress(address);
         if (parent != null) {
-
-            if (di.check(fil.arr[0])) {
+            if(di.checboundry(parent.arr,fil.arr)){
+            if (di.checkFile(fil.arr)) {
                 {
                     fil.level = parent.level + 1;
                     parent.fi.add(fil);
-                    di.add(fil.arr);
+                    di.addFile(fil.arr);
                     return("File Added !");
                 }
             } else {
                 return("Not Have Enoght Space or out of range");
             }
+        }
+            else
+                return("out of limited block or folder") ;
         } else {
-            return("No Folder With This Name1");
+            return("Wrong address");
         }
 
     }
